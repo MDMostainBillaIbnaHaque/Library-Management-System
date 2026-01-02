@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Fines (Admin)</h2>
+<table class="table">
+  <thead><tr><th>ID</th><th>User</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
+  <tbody>
+    {% for f in fines %}
+      <tr>
+        <td>{{ f.id }}</td>
+        <td>{{ f.user_name }} (id: {{ f.user_id }})</td>
+        <td>{{ f.amount }}</td>
+        <td>{{ f.status }}</td>
+        <td>
+          {% if f.status != 'Paid' %}
+          <form method="post" action="/admin/fine/{{ f.id }}/pay" class="d-inline">
+            <button class="btn btn-sm btn-success">Mark Paid</button>
+          </form>
+          {% else %}
+            &mdash;
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

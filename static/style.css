@@ -1,0 +1,26 @@
+body { padding-bottom: 40px; }
+.alert { margin-top: 10px; }
+.img-thumbnail { max-height: 120px; }
+.list-group-item img.img-thumbnail { max-height: 80px; width: auto; }
+.book-meta { font-size: 0.9rem; color: #666; }
+
+/* subtle pulse animation for friendly alerts */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+.pulse { animation: pulse 2.5s ease-in-out infinite; }
+.emoji { font-size: 1.25rem; margin-right: 6px; }
+.suggestion { font-size: 0.95rem; color: #444; }
+
+/* Auth background and card */
+.auth-bg {
+  background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('/static/auth_bg.png') center/cover no-repeat fixed;
+}
+.auth-wrapper { min-height: calc(100vh - 100px); display:flex; align-items:center; justify-content:center; padding: 60px 0; }
+.auth-card { background: rgba(255,255,255,0.95); padding: 28px; border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.2); max-width: 560px; width: 100%; }
+.auth-card h2 { margin-top: 0; }
+.auth-note { color: #555; font-size: 0.95rem; margin-bottom: 12px; }
+
+

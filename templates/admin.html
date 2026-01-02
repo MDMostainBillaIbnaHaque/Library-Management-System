@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Library Management System — Admin</h2>
+<div class="row mb-3">
+  <div class="col-md-3">
+    <div class="card text-center p-2">
+      <h5>Users <span class="emoji">👥</span></h5>
+      <p class="display-6">{{ user_count }}</p>
+      <a href="/admin/users" class="btn btn-sm btn-outline-primary">Manage</a>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center p-2">
+      <h5>Books <span class="emoji">📚</span></h5>
+      <p class="display-6">{{ book_count }}</p>
+      <a href="/books" class="btn btn-sm btn-outline-primary">View</a>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center p-2">
+      <h5>Fines <span class="emoji">🧾</span></h5>
+      <p class="display-6">{{ fine_count }}</p>
+      <a href="/fines" class="btn btn-sm btn-outline-primary">Manage</a>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center p-2">
+      <h5>Payments <span class="emoji">💳</span></h5>
+      <p class="display-6">&mdash;</p>
+      <a href="/admin/payments" class="btn btn-sm btn-outline-primary">View</a>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h5>Add Book</h5>
+    <form method="post" action="/add_book" class="row g-2">
+      <div class="col-md-3"><input class="form-control" name="title" placeholder="Title" required></div>
+      <div class="col-md-3"><input class="form-control" name="author" placeholder="Author"></div>
+      <div class="col-md-2"><input class="form-control" name="isbn" placeholder="ISBN"></div>
+      <div class="col-md-2"><input class="form-control" name="category" placeholder="Category"></div>
+      <div class="col-md-1"><input class="form-control" name="quantity" type="number" min="1" value="1"></div>
+      <div class="col-md-12 mt-2"><button class="btn btn-primary">Add Book</button></div>
+    </form>
+  </div>
+</div>
+
+<hr>
+<div class="btn-group mb-4">
+  <a class="btn btn-outline-secondary" href="/admin/users">Manage Users</a>
+  <a class="btn btn-outline-secondary" href="/admin/transactions">Transactions</a>
+  <a class="btn btn-outline-secondary" href="/fines">Fines</a>
+  <a class="btn btn-outline-secondary" href="/admin/payments">Payments</a>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h5>Admin actions <span class="emoji">⚙️</span></h5>
+    <p class="suggestion">Quick actions to manage scheduled jobs and sample data.</p>
+    <form method="post" action="/admin/run_jobs" class="d-inline me-2">
+      <button class="btn btn-warning pulse">Run scheduled jobs now</button>
+    </form>
+    <form method="post" action="/admin/seed_books" class="d-inline">
+      <button class="btn btn-primary">Seed sample books (ensure 50)</button>
+    </form>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h5>Manage books <span class="emoji">📚</span></h5>
+    <p class="suggestion">Edit or remove recent books quickly from here.</p>
+    {% if recent_books %}
+      <ul class="list-group">
+        {% for b in recent_books %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <strong>{{ b['title'] }}</strong> <span class="book-meta">by {{ b['author'] }} • available: {{ b['available'] }}</span>
+          </div>
+          <div>
+            <a class="btn btn-sm btn-outline-primary" href="/admin/book/{{ b['id'] }}/edit">Edit</a>
+            <form method="post" action="/admin/book/{{ b['id'] }}/delete" class="d-inline ms-2">
+              <button class="btn btn-sm btn-danger" onclick="return confirm('Delete book {{ b.title }}?')">Delete</button>
+            </form>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No books found. Use <strong>Seed sample books</strong> or add a book via the Add Book form above.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h5>Active Borrows</h5>
+    {% if active_txs %}
+      <table class="table">
+        <thead><tr><th>TX</th><th>Member</th><th>Book</th><th>Qty (total)</th><th>Available</th><th>Issue</th><th>Due</th></tr></thead>
+        <tbody>
+        {% for t in active_txs %}
+          <tr>
+            <td>{{ t.txid }}</td>
+            <td>{{ t.user_name }}</td>
+            <td>{{ t.book_title }}</td>
+            <td>{{ t.book_quantity }}</td>
+            <td>{{ t.book_available }}</td>
+            <td>{{ t.issue_date }}</td>
+            <td>{{ t.due_date }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No active borrows</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <h5>Low stock books</h5>
+    {% set low = get_low_stock() %}
+    {% if low %}
+      <ul>
+        {% for b in low %}
+          <li>{{ b['title'] }} — available: {{ b['available'] }} / total: {{ b['quantity'] }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No low stock alerts</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Library Management System — Member <span class="emoji">👋</span></h2>
+<p>Welcome, {{ session.user_name }}!</p>
+<p class="suggestion">Tip: Browse books and click <strong>Borrow</strong> to check out items. If you see an error, contact an admin.</p>
+<a class="btn btn-primary pulse" href="/books">View Books</a>
+<a class="btn btn-warning ms-2" href="/fines">View Fines</a>
+<a class="btn btn-success ms-2" href="/payment">Pay Outstanding Fines</a>
+<hr>
+<h5>Your Borrowed Books</h5>
+<div class="list-group">
+  {% set txs = [] %}
+  {% set txs = (get_user_transactions() if True else []) %}
+  {% if txs %}
+    {% for t in txs %}
+      <div class="list-group-item">
+        <strong>{{ t.book_title }}</strong> — Borrowed on: {{ t.issue_date }} | Due: {{ t.due_date }}<br>
+        Days borrowed: {{ t.days_borrowed }} | Overdue days: {{ t.overdue_days }} | Estimated fine: {{ t.estimated_fine }}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No active borrows.</p>
+  {% endif %}
+</div>
+<form method="post" action="/account/send_reset" class="d-inline ms-2">
+  <button class="btn btn-sm btn-outline-warning" onclick="return confirm('Send a password reset email to {{ session.user_name }}?')">Send password reset email</button>
+</form>
+{% endblock %}

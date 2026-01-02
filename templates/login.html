@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block body_class %}auth-bg{% endblock %}
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <h2>Login</h2>
+    <p class="auth-note">Sign in to access your library account.</p>
+    <form method="post">
+      <div class="mb-3">
+        <input class="form-control" name="email" placeholder="Email" required>
+      </div>
+      <div class="mb-3">
+        <input class="form-control" name="password" type="password" placeholder="Password" required>
+      </div>
+      <button class="btn btn-primary">Login</button>
+    </form>
+    <p class="mt-2">Don't have an account? <a href="/register">Register</a></p>
+    <p class="mt-1">Didn't receive verification email? <a href="/resend">Resend verification</a></p>
+    <p class="mt-1"><a href="/forgot">Forgot password?</a></p>
+  </div>
+</div>
+{% endblock %}

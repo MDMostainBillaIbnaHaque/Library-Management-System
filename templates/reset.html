@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h2>Reset password</h2>
+    <form method="post">
+      <div class="mb-3">
+        <input class="form-control" name="password" type="password" placeholder="New password" required>
+      </div>
+      <div class="mb-3">
+        <input class="form-control" name="password2" type="password" placeholder="Confirm password" required>
+      </div>
+      <button class="btn btn-success">Set new password</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

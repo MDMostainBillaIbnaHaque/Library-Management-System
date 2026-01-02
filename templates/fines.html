@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Fines</h2>
+{% for f in fines %}
+  <div class="card mb-2">
+    <div class="card-body">
+      <p>Fine: <strong>{{ f['amount'] }}</strong> | Status: {{ f['status'] }}</p>
+      {% if f['status'] == 'Unpaid' %}
+        <form method="post" action="/pay" class="row g-2">
+          <input type="hidden" name="amount" value="{{ f['amount'] }}">
+          <div class="col-md-4">
+            <select name="method" class="form-select">
+              <option>Card</option>
+              <option>bKash</option>
+              <option>Nagad</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-primary">Pay</button>
+          </div>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+{% else %}
+  <p>No fines</p>
+{% endfor %}
+{% endblock %}

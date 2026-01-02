@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Payments</h2>
+<table class="table">
+  <thead><tr><th>ID</th><th>User</th><th>Amount</th><th>Method</th><th>Date</th></tr></thead>
+  <tbody>
+    {% for p in payments %}
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.user_name }}</td>
+        <td>{{ p.amount }}</td>
+        <td>{{ p.method }}</td>
+        <td>{{ p.date }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

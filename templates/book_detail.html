@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ book['title'] }}</h2>
+<div class="row">
+  <div class="col-md-3">
+      <img src="/{{ book['image'] or 'static/book_images/default.png' }}" alt="cover" class="img-fluid img-thumbnail">
+  </div>
+  <div class="col-md-9">
+    <p><strong>Author:</strong> {{ book['author'] }}</p>
+    <p><strong>ISBN:</strong> {{ book['isbn'] }}</p>
+    <p><strong>Category:</strong> {{ book['category'] or '—' }}</p>
+    <p><strong>Available:</strong> {{ book['available'] }}</p>
+    {% if book['pdf'] %}
+      <a class="btn btn-outline-primary" href="/{{ book['pdf'] }}" target="_blank">Open PDF</a>
+    {% endif %}
+    {% if book['available'] > 0 %}
+      <a class="btn btn-success" href="/borrow/{{ book['id'] }}">Borrow</a>
+    {% endif %}
+    {% if session.user_role == 'admin' %}
+      <a class="btn btn-outline-primary ms-2" href="/admin/book/{{ book['id'] }}/edit">Edit</a>
+      <form method="post" action="/admin/book/{{ book['id'] }}/delete" class="d-inline ms-2">
+        <button class="btn btn-danger" onclick="return confirm('Delete this book? This cannot be undone.')">Delete</button>
+      </form>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

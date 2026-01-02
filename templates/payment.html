@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Payment</h2>
+{% if total and total > 0 %}
+  <p>Total outstanding fines: <strong>${{ total }}</strong></p>
+  {% if stripe_key %}
+    <form method="post" action="/create_checkout_session">
+      <input type="hidden" name="amount" value="{{ total }}">
+      <button class="btn btn-primary">Pay with Card (Stripe)</button>
+    </form>
+    <hr>
+    <p>Or use mock payment:</p>
+  {% endif %}
+{% else %}
+  <p>No outstanding fines.</p>
+{% endif %}
+<form method="post" action="/pay">
+  <div class="mb-3">
+    <input class="form-control" name="amount" placeholder="Amount" value="{{ total }}">
+  </div>
+  <div class="mb-3">
+    <select id="pay-method" name="method" class="form-select">
+      <option>Card</option>
+      <option>bKash</option>
+      <option>Nagad</option>
+    </select>
+  </div>
+  <div id="card-fields" style="display:none;">
+    <div class="mb-2">
+      <input class="form-control" name="card_holder" placeholder="Cardholder name">
+    </div>
+    <div class="mb-2">
+      <input class="form-control" name="card_number" placeholder="Card number (no spaces)">
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-2"><input class="form-control" name="card_expiry" placeholder="MM/YY"></div>
+      <div class="col-md-6 mb-2"><input class="form-control" name="card_cvc" placeholder="CVC"></div>
+    </div>
+    <small class="text-muted">Card details are used only to simulate a card payment and are not stored. Do not use real card data in development.</small>
+  </div>
+  <button class="btn btn-success">Pay</button>
+</form>
+
+<script>
+  const methodEl = document.getElementById('pay-method');
+  const cardFields = document.getElementById('card-fields');
+  function toggleCard() {
+    if (methodEl.value === 'Card') cardFields.style.display = 'block'; else cardFields.style.display = 'none';
+  }
+  methodEl.addEventListener('change', toggleCard);
+  document.addEventListener('DOMContentLoaded', toggleCard);
+</script>
+{% endblock %}

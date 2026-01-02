@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Transactions</h2>
+<table class="table">
+  <thead>
+    <tr><th>ID</th><th>User</th><th>Book</th><th>Issue</th><th>Due</th><th>Return</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+    {% for t in transactions %}
+      <tr>
+        <td>{{ t.id }}</td>
+        <td>{{ t.user_name }}</td>
+        <td>{{ t.book_title }}</td>
+        <td>{{ t.issue_date }}</td>
+        <td>{{ t.due_date }}</td>
+        <td>{{ t.return_date or '—' }}</td>
+        <td>
+          <a class="btn btn-sm btn-outline-secondary" href="/receipt/issue/{{ t.id }}">Issue receipt</a>
+          {% if t.return_date %}
+            <a class="btn btn-sm btn-outline-secondary" href="/receipt/return/{{ t.id }}">Return receipt</a>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
